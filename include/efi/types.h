@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 typedef uint8_t BOOLEAN;
-typedef long INTN;
-typedef unsigned long UINTN;
+typedef int64_t INTN;
+typedef uint64_t UINTN;
 typedef int8_t INT8;
 typedef uint8_t UINT8;
 typedef int16_t INT16;
@@ -72,40 +72,42 @@ typedef struct
     UINT32 OpenCount;
 } EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
+#define ERROR_MASK (1ULL << (sizeof(UINTN) * 8 - 1))
+
 #define EFI_SUCCESS                 0
-#define EFI_LOAD_ERROR              ((1 << 63) | 1)
-#define EFI_INVALID_PARAMETER       ((1 << 63) | 2)
-#define EFI_UNSUPPORTED             ((1 << 63) | 3)
-#define EFI_BAD_BUFFER_SIZE         ((1 << 63) | 4)
-#define EFI_BUFFER_TOO_SMALL        ((1 << 63) | 5)
-#define EFI_NOT_READY               ((1 << 63) | 6)
-#define EFI_DEVICE_ERROR            ((1 << 63) | 7)
-#define EFI_WRITE_PROTECTED         ((1 << 63) | 8)
-#define EFI_OUT_OF_RESOURCES        ((1 << 63) | 9)
-#define EFI_VOLUME_CORRUPTED        ((1 << 63) | 10)
-#define EFI_VOLUME_FULL             ((1 << 63) | 11)
-#define EFI_NO_MEDIA                ((1 << 63) | 12)
-#define EFI_MEDIA_CHANGED           ((1 << 63) | 13)
-#define EFI_NOT_FOUND               ((1 << 63) | 14)
-#define EFI_ACCESS_DENIED           ((1 << 63) | 15)
-#define EFI_NO_RESPONSE             ((1 << 63) | 16)
-#define EFI_NO_MAPPING              ((1 << 63) | 17)
-#define EFI_TIMEOUT                 ((1 << 63) | 18)
-#define EFI_NOT_STARTED             ((1 << 63) | 19)
-#define EFI_ALREADY_STARTED         ((1 << 63) | 20)
-#define EFI_ABORTED                 ((1 << 63) | 21)
-#define EFI_ICMP_ERROR              ((1 << 63) | 22)
-#define EFI_TFTP_ERROR              ((1 << 63) | 23)
-#define EFI_PROTOCOL_ERROR          ((1 << 63) | 24)
-#define EFI_INCOMPATIBLE_VERSION    ((1 << 63) | 25)
-#define EFI_SECURITY_VIOLATION      ((1 << 63) | 26)
-#define EFI_CRC_ERROR               ((1 << 63) | 27)
-#define EFI_END_OF_MEDIA            ((1 << 63) | 28)
-#define EFI_END_OF_FILE             ((1 << 63) | 31)
-#define EFI_INVALID_LANGUAGE        ((1 << 63) | 32)
-#define EFI_COMPROMISED_DATA        ((1 << 63) | 33)
-#define EFI_IP_ADDRESS_CONFLICT     ((1 << 63) | 34)
-#define EFI_HTTP_ERROR              ((1 << 63) | 35)
+#define EFI_LOAD_ERROR              (ERROR_MASK | 1)
+#define EFI_INVALID_PARAMETER       (ERROR_MASK | 2)
+#define EFI_UNSUPPORTED             (ERROR_MASK | 3)
+#define EFI_BAD_BUFFER_SIZE         (ERROR_MASK | 4)
+#define EFI_BUFFER_TOO_SMALL        (ERROR_MASK | 5)
+#define EFI_NOT_READY               (ERROR_MASK | 6)
+#define EFI_DEVICE_ERROR            (ERROR_MASK | 7)
+#define EFI_WRITE_PROTECTED         (ERROR_MASK | 8)
+#define EFI_OUT_OF_RESOURCES        (ERROR_MASK | 9)
+#define EFI_VOLUME_CORRUPTED        (ERROR_MASK | 10)
+#define EFI_VOLUME_FULL             (ERROR_MASK | 11)
+#define EFI_NO_MEDIA                (ERROR_MASK | 12)
+#define EFI_MEDIA_CHANGED           (ERROR_MASK | 13)
+#define EFI_NOT_FOUND               (ERROR_MASK | 14)
+#define EFI_ACCESS_DENIED           (ERROR_MASK | 15)
+#define EFI_NO_RESPONSE             (ERROR_MASK | 16)
+#define EFI_NO_MAPPING              (ERROR_MASK | 17)
+#define EFI_TIMEOUT                 (ERROR_MASK | 18)
+#define EFI_NOT_STARTED             (ERROR_MASK | 19)
+#define EFI_ALREADY_STARTED         (ERROR_MASK | 20)
+#define EFI_ABORTED                 (ERROR_MASK | 21)
+#define EFI_ICMP_ERROR              (ERROR_MASK | 22)
+#define EFI_TFTP_ERROR              (ERROR_MASK | 23)
+#define EFI_PROTOCOL_ERROR          (ERROR_MASK | 24)
+#define EFI_INCOMPATIBLE_VERSION    (ERROR_MASK | 25)
+#define EFI_SECURITY_VIOLATION      (ERROR_MASK | 26)
+#define EFI_CRC_ERROR               (ERROR_MASK | 27)
+#define EFI_END_OF_MEDIA            (ERROR_MASK | 28)
+#define EFI_END_OF_FILE             (ERROR_MASK | 31)
+#define EFI_INVALID_LANGUAGE        (ERROR_MASK | 32)
+#define EFI_COMPROMISED_DATA        (ERROR_MASK | 33)
+#define EFI_IP_ADDRESS_CONFLICT     (ERROR_MASK | 34)
+#define EFI_HTTP_ERROR              (ERROR_MASK | 35)
 
 #define EFI_WARN_UNKNOWN_GLYPH      1
 #define EFI_WARN_DELETE_FAILURE     2
@@ -114,5 +116,7 @@ typedef struct
 #define EFI_WARN_STALE_DATA         5
 #define EFI_WARN_FILE_SYSTEM        6
 #define EFI_WARN_RESET_REQUIRED     7
+
+#define NULL ((void*)0)
 
 #endif // _GIT_UEFI_INCLUDE_EFI_TYPES_H_
