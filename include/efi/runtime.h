@@ -135,4 +135,117 @@ typedef struct
 
 extern EFI_RUNTIME_SERVICES *gRS;
 
+static inline EFI_STATUS EfiGetTime(
+    OUT EFI_TIME *Time,
+    OUT EFI_TIME_CAPABILITIES *Capabilities OPTIONAL)
+{
+    return gRS->GetTime(Time, Capabilities);
+}
+
+static inline EFI_STATUS EfiSetTime(
+    IN EFI_TIME *Time)
+{
+    return gRS->SetTime(Time);
+}
+
+static inline EFI_STATUS EfiGetWakeupTime(
+    OUT BOOLEAN *Enabled,
+    OUT BOOLEAN *Pending,
+    OUT EFI_TIME *Time)
+{
+    return gRS->GetWakeupTime(Enabled, Pending, Time);
+}
+
+static inline EFI_STATUS EfiSetWakeupTime(
+    IN BOOLEAN Enable,
+    IN EFI_TIME *Time OPTIONAL)
+{
+    return gRS->SetWakeupTime(Enable, Time);
+}
+
+static inline EFI_STATUS EfiSetVirtualAddressMap(
+    IN UINTN MemoryMapSize,
+    IN UINTN DescriptorSize,
+    IN UINT32 DescriptorVersion,
+    IN EFI_MEMORY_DESCRIPTOR *VirtualMap)
+{
+    return gRS->SetVirtualAddressMap(MemoryMapSize, DescriptorSize, DescriptorVersion, VirtualMap);
+}
+
+static inline EFI_STATUS EfiConvertPointer(
+    IN UINTN DebugDisposition,
+    IN VOID **Address)
+{
+    return gRS->ConvertPointer(DebugDisposition, Address);
+}
+
+static inline EFI_STATUS EfiGetVariable(
+    IN CHAR16 *VariableName,
+    IN EFI_GUID *VendorGuid,
+    OUT UINT32 *Attributes OPTIONAL,
+    IN OUT UINTN *DataSize,
+    OUT VOID *Data OPTIONAL)
+{
+    return gRS->GetVariable(VariableName, VendorGuid, Attributes, DataSize, Data);
+}
+
+static inline EFI_STATUS EfiGetNextVariableName(
+    IN OUT UINTN *VariableNameSize,
+    IN OUT CHAR16 *VariableName,
+    IN OUT EFI_GUID *VendorGuid)
+{
+    return gRS->GetNextVariableName(VariableNameSize, VariableName, VendorGuid);
+}
+
+static inline EFI_STATUS EfiSetVariable(
+    IN CHAR16 *VariableName,
+    IN EFI_GUID *VendorGuid,
+    IN UINT32 Attributes,
+    IN UINTN DataSize,
+    IN VOID *Data)
+{
+    return gRS->SetVariable(VariableName, VendorGuid, Attributes, DataSize, Data);
+}
+
+static inline VOID EfiResetSystem(
+    IN EFI_RESET_TYPE ResetType,
+    IN EFI_STATUS ResetStatus,
+    IN UINTN DataSize,
+    IN VOID *ResetData OPTIONAL)
+{
+    gRS->ResetSystem(ResetType, ResetStatus, DataSize, ResetData);
+}
+
+static inline EFI_STATUS EfiGetNextHighMonotonicCount(
+    OUT UINT32 *HighCount)
+{
+    return gRS->GetNextHighMonotonicCount(HighCount);
+}
+
+static inline EFI_STATUS EfiUpdateCapsule(
+    IN EFI_CAPSULE_HEADER **CapsuleHeaderArray,
+    IN UINTN CapsuleCount,
+    IN EFI_PHYSICAL_ADDRESS ScatterGatherList OPTIONAL)
+{
+    return gRS->UpdateCapsule(CapsuleHeaderArray, CapsuleCount, ScatterGatherList);
+}
+
+static inline EFI_STATUS EfiQueryCapsuleCapabilities(
+    IN EFI_CAPSULE_HEADER **CapsuleHeaderArray,
+    IN UINTN CapsuleCount,
+    OUT UINT64 *MaximumCapsuleSize,
+    OUT EFI_RESET_TYPE *ResetType)
+{
+    return gRS->QueryCapsuleCapabilities(CapsuleHeaderArray, CapsuleCount, MaximumCapsuleSize, ResetType);
+}
+
+static inline EFI_STATUS EfiQueryVariableInfo(
+    IN UINT32 Attributes,
+    OUT UINT64 *MaximumVariableStorageSize,
+    OUT UINT64 *RemainingVariableStorageSize,
+    OUT UINT64 *MaximumVariableSize)
+{
+    return gRS->QueryVariableInfo(Attributes, MaximumVariableStorageSize, RemainingVariableStorageSize, MaximumVariableSize);
+}
+
 #endif // INCLUDE_EFI_RUNTIME_H_
