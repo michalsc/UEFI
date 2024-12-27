@@ -64,11 +64,6 @@ typedef EFI_STATUS(EFIAPI *EFI_WAIT_FOR_EVENT)(
 typedef EFI_STATUS(EFIAPI *EFI_SIGNAL_EVENT)(
     IN EFI_EVENT Event);
 
-typedef EFI_STATUS(EFIAPI *EFI_WAIT_FOR_EVENT)(
-    IN UINTN NumberOfEvents,
-    IN EFI_EVENT *Event,
-    OUT UINTN *Index);
-
 typedef EFI_STATUS(EFIAPI *EFI_CLOSE_EVENT)(
     IN EFI_EVENT Event);
 
@@ -340,5 +335,329 @@ typedef struct
 } EFI_BOOT_SERVICES;
 
 extern EFI_BOOT_SERVICES *gBS;
+
+static inline VOID EfiRestoreTPL(
+    IN EFI_TPL OldTpl)
+{
+    gBS->RestoreTPL(OldTpl);
+}
+
+static inline EFI_STATUS EfiAllocatePages(
+    IN EFI_ALLOCATE_TYPE Type,
+    IN EFI_MEMORY_TYPE MemoryType,
+    IN UINTN Pages,
+    IN OUT EFI_PHYSICAL_ADDRESS *Memory)
+{
+    return gBS->AllocatePages(Type, MemoryType, Pages, Memory);
+}
+
+static inline EFI_STATUS EfiFreePages(
+    IN EFI_PHYSICAL_ADDRESS Memory,
+    IN UINTN Pages)
+{
+    return gBS->FreePages(Memory, Pages);
+}
+
+static inline EFI_STATUS EfiGetMemoryMap(
+    IN OUT UINTN *MemoryMapSize,
+    OUT EFI_MEMORY_DESCRIPTOR *MemoryMap,
+    OUT UINTN *MapKey,
+    OUT UINTN *DescriptorSize,
+    OUT UINT32 *DescriptorVersion)
+{
+    return gBS->GetMemoryMap(MemoryMapSize, MemoryMap, MapKey, DescriptorSize, DescriptorVersion);
+}
+
+static inline EFI_STATUS EfiAllocatePool(
+    IN EFI_MEMORY_TYPE PoolType,
+    IN UINTN Size,
+    OUT VOID **Buffer)
+{
+    return gBS->AllocatePool(PoolType, Size, Buffer);
+}
+
+static inline EFI_STATUS EfiFreePool(
+    IN VOID *Buffer)
+{
+    return gBS->FreePool(Buffer);
+}
+
+static inline EFI_STATUS EfiCreateEvent(
+    IN UINT32 Type,
+    IN EFI_TPL NotifyTpl,
+    IN EFI_EVENT_NOTIFY NotifyFunction, OPTIONAL IN VOID *NotifyContext, OPTIONAL OUT EFI_EVENT *Event)
+{
+    return gBS->CreateEvent(Type, NotifyTpl, NotifyFunction, NotifyContext, Event);
+}
+
+static inline EFI_STATUS EfiSetTimer(
+    IN EFI_EVENT Event,
+    IN EFI_TIMER_DELAY Type,
+    IN UINT64 TriggerTime)
+{
+    return gBS->SetTimer(Event, Type, TriggerTime);
+}
+
+static inline EFI_STATUS EfiWaitForEvent(
+    IN UINTN NumberOfEvents,
+    IN EFI_EVENT *Event,
+    OUT UINTN *Index)
+{
+    return gBS->WaitForEvent(NumberOfEvents, Event, Index);
+}
+
+static inline EFI_STATUS EfiSignalEvent(
+    IN EFI_EVENT Event)
+{
+    return gBS->SignalEvent(Event);
+}
+
+static inline EFI_STATUS EfiCloseEvent(
+    IN EFI_EVENT Event)
+{
+    return gBS->CloseEvent(Event);
+}
+
+static inline EFI_STATUS EfiCheckEvent(
+    IN EFI_EVENT Event)
+{
+    return gBS->CheckEvent(Event);
+}
+
+static inline EFI_STATUS EfiInstallProtocolInterface(
+    IN OUT EFI_HANDLE *Handle,
+    IN EFI_GUID *Protocol,
+    IN EFI_INTERFACE_TYPE InterfaceType,
+    IN VOID *Interface)
+{
+    return gBS->InstallProtocolInterface(Handle, Protocol, InterfaceType, Interface);
+}
+
+static inline EFI_STATUS EfiReinstallProtocolInterface(
+    IN EFI_HANDLE Handle,
+    IN EFI_GUID *Protocol,
+    IN VOID *OldInterface,
+    IN VOID *NewInterface)
+{
+    return gBS->ReinstallProtocolInterface(Handle, Protocol, OldInterface, NewInterface);
+}
+
+static inline EFI_STATUS EfiUninstallProtocolInterface(
+    IN EFI_HANDLE Handle,
+    IN EFI_GUID *Protocol,
+    IN VOID *Interface)
+{
+    return gBS->UninstallProtocolInterface(Handle, Protocol, Interface);
+}
+
+static inline EFI_STATUS EfiHandleProtocol(
+    IN EFI_HANDLE Handle,
+    IN EFI_GUID *Protocol,
+    OUT VOID **Interface)
+{
+    return gBS->HandleProtocol(Handle, Protocol, Interface);
+}
+
+static inline EFI_STATUS EfiRegisterProtocolNotify(
+    IN EFI_GUID *Protocol,
+    IN EFI_EVENT Event,
+    OUT VOID **Registration)
+{
+    return gBS->RegisterProtocolNotify(Protocol, Event, Registration);
+}
+
+static inline EFI_STATUS EfiLocateHandle(
+    IN EFI_LOCATE_SEARCH_TYPE SearchType,
+    IN EFI_GUID *Protocol OPTIONAL,
+    IN VOID *SearchKey OPTIONAL,
+    IN OUT UINTN *BufferSize,
+    OUT EFI_HANDLE *Buffer)
+{
+    return gBS->LocateHandle(SearchType, Protocol, SearchKey, BufferSize, Buffer);
+}
+
+static inline EFI_STATUS EfiLocateDevicePath(
+    IN EFI_GUID *Protocol,
+    IN OUT EFI_DEVICE_PATH_PROTOCOL **DevicePath,
+    OUT EFI_HANDLE *Device)
+{
+    return gBS->LocateDevicePath(Protocol, DevicePath, Device);
+}
+
+static inline EFI_STATUS EfiInstallConfigurationTable(
+    IN EFI_GUID *Guid,
+    IN VOID *Table)
+{
+    return gBS->InstallConfigurationTable(Guid, Table);
+}
+
+static inline EFI_STATUS EfiImageLoad(
+    IN BOOLEAN BootPolicy,
+    IN EFI_HANDLE ParentImageHandle,
+    IN EFI_DEVICE_PATH_PROTOCOL *DevicePath,
+    IN VOID *SourceBuffer OPTIONAL,
+    IN UINTN SourceSize,
+    OUT EFI_HANDLE *ImageHandle)
+{
+    return gBS->LoadImage(BootPolicy, ParentImageHandle, DevicePath, SourceBuffer, SourceSize, ImageHandle);
+}
+
+static inline EFI_STATUS EfiImageStart(
+    IN EFI_HANDLE ImageHandle,
+    OUT UINTN *ExitDataSize,
+    OUT CHAR16 **ExitData OPTIONAL)
+{
+    return gBS->StartImage(ImageHandle, ExitDataSize, ExitData);
+}
+
+static inline EFI_STATUS EfiExit(
+    IN EFI_HANDLE ImageHandle,
+    IN EFI_STATUS ExitStatus,
+    IN UINTN ExitDataSize,
+    IN CHAR16 *ExitData OPTIONAL)
+{
+    return gBS->Exit(ImageHandle, ExitStatus, ExitDataSize, ExitData);
+}
+
+static inline EFI_STATUS EfiImageUnload(
+    IN EFI_HANDLE ImageHandle)
+{
+    return gBS->UnloadImage(ImageHandle);
+}
+
+static inline EFI_STATUS EfiExitBootServices(
+    IN EFI_HANDLE ImageHandle,
+    IN UINTN MapKey)
+{
+    return gBS->ExitBootServices(ImageHandle, MapKey);
+}
+
+static inline EFI_STATUS EfiGetNextMonotonicCount(
+    OUT UINT64 *Count)
+{
+    return gBS->GetNextMonotonicCount(Count);
+}
+
+static inline EFI_STATUS EfiStall(
+    IN UINTN Microseconds)
+{
+    return gBS->Stall(Microseconds);
+}
+
+static inline EFI_STATUS EfiSetWatchdogTimer(
+    IN UINTN Timeout,
+    IN UINT64 WatchdogCode,
+    IN UINTN DataSize,
+    IN CHAR16 *WatchdogData OPTIONAL)
+{
+    return gBS->SetWatchdogTimer(Timeout, WatchdogCode, DataSize, WatchdogData);
+}
+
+static inline EFI_STATUS EfiConnectController(
+    IN EFI_HANDLE ControllerHandle,
+    IN EFI_HANDLE *DriverImageHandle OPTIONAL,
+    IN EFI_DEVICE_PATH_PROTOCOL *RemainingDevicePath OPTIONAL,
+    IN BOOLEAN Recursive)
+{
+    return gBS->ConnectController(ControllerHandle, DriverImageHandle, RemainingDevicePath, Recursive);
+}
+
+static inline EFI_STATUS EfiDisconnectController(
+    IN EFI_HANDLE ControllerHandle,
+    IN EFI_HANDLE DriverImageHandle OPTIONAL,
+    IN EFI_HANDLE ChildHandle OPTIONAL)
+{
+    return gBS->DisconnectController(ControllerHandle, DriverImageHandle, ChildHandle);
+}
+
+static inline EFI_STATUS EfiOpenProtocol(
+    IN EFI_HANDLE Handle,
+    IN EFI_GUID *Protocol,
+    OUT VOID **Interface OPTIONAL,
+    IN EFI_HANDLE AgentHandle,
+    IN EFI_HANDLE ControllerHandle,
+    IN UINT32 Attributes)
+{
+    return gBS->OpenProtocol(Handle, Protocol, Interface, AgentHandle, ControllerHandle, Attributes);
+}
+
+static inline EFI_STATUS EfiCloseProtocol(
+    IN EFI_HANDLE Handle,
+    IN EFI_GUID *Protocol,
+    IN EFI_HANDLE AgentHandle,
+    IN EFI_HANDLE ControllerHandle)
+{
+    return gBS->CloseProtocol(Handle, Protocol, AgentHandle, ControllerHandle);
+}
+
+static inline EFI_STATUS EfiOpenProtocolInformation(
+    IN EFI_HANDLE Handle,
+    IN EFI_GUID *Protocol,
+    OUT EFI_OPEN_PROTOCOL_INFORMATION_ENTRY **EntryBuffer,
+    OUT UINTN *EntryCount)
+{
+    return gBS->OpenProtocolInformation(Handle, Protocol, EntryBuffer, EntryCount);
+}
+
+static inline EFI_STATUS EfiProtocolsPerHandle(
+    IN EFI_HANDLE Handle,
+    OUT EFI_GUID ***ProtocolBuffer,
+    OUT UINTN *ProtocolBufferCount)
+{
+    return gBS->ProtocolsPerHandle(Handle, ProtocolBuffer, ProtocolBufferCount);
+}
+
+static inline EFI_STATUS EfiLocateHandleBuffer(
+    IN EFI_LOCATE_SEARCH_TYPE SearchType,
+    IN EFI_GUID *Protocol OPTIONAL,
+    IN VOID *SearchKey OPTIONAL,
+    OUT UINTN *NoHandles,
+    OUT EFI_HANDLE **Buffer)
+{
+    return gBS->LocateHandleBuffer(SearchType, Protocol, SearchKey, NoHandles, Buffer);
+}
+
+static inline EFI_STATUS EfiLocateProtocol(
+    IN EFI_GUID *Protocol,
+    IN VOID *Registration OPTIONAL,
+    OUT VOID **Interface)
+{
+    return gBS->LocateProtocol(Protocol, Registration, Interface);
+}
+
+static inline EFI_STATUS EfiCalculateCrc32(
+    IN VOID *Data,
+    IN UINTN DataSize,
+    OUT UINT32 *Crc32)
+{
+    return gBS->CalculateCrc32(Data, DataSize, Crc32);
+}
+
+static inline VOID EfiCopyMem(
+    IN VOID *Destination,
+    IN VOID *Source,
+    IN UINTN Length)
+{
+    gBS->CopyMem(Destination, Source, Length);
+}
+
+static inline VOID EfiSetMem(
+    IN void *Buffer,
+    IN UINTN Size,
+    IN UINT8 Value)
+{
+    gBS->SetMem(Buffer, Size, Value);
+}
+
+static inline EFI_STATUS EfiCreateEventEx(
+    IN UINT32 Type,
+    IN EFI_TPL NotifyTpl,
+    IN EFI_EVENT_NOTIFY NotifyFunction OPTIONAL,
+    IN CONST void *NotifyContext OPTIONAL,
+    IN CONST EFI_GUID *EventGroup OPTIONAL,
+    OUT EFI_EVENT *Event)
+{
+    return gBS->CreateEventEx(Type, NotifyTpl, NotifyFunction, NotifyContext, EventGroup, Event);
+}
 
 #endif // INCLUDE_EFI_BOOT_H_
