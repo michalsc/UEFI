@@ -3,6 +3,19 @@
 #include <stdarg.h>
 #include <support.h>
 
+EFI_RUNTIME_SERVICES *gRS;
+EFI_BOOT_SERVICES *gBS;
+EFI_SYSTEM_TABLE *gST;
+EFI_HANDLE *gIH;
+
+void EfiSetup(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE *system)
+{
+    gIH = imageHandle;
+    gST = system;
+    gBS = gST->BootServices;
+    gRS = gST->RuntimeServices;
+}
+
 #define LOG2_10 3.321928094887362
 
 static double pow10_tab[] = {
@@ -517,6 +530,7 @@ void vkprintf_pc(putc_func putc_f, void *putc_data, const CHAR16 *restrict forma
                 case 'c':
                     putc_f(putc_data, va_arg(args, int));
                     break;
+
                 case 's':
                 {
                     CHAR16 * str = va_arg(args, CHAR16 *);
@@ -530,7 +544,9 @@ void vkprintf_pc(putc_func putc_f, void *putc_data, const CHAR16 *restrict forma
                     } while (*str++ && --precision);
                     while (size_mod-- > 0)
                         putc_f(putc_data, u' ');
+                    break;
                 }
+                
                 case 'S':
                 {
                     char *str = va_arg(args, char *);
@@ -544,8 +560,8 @@ void vkprintf_pc(putc_func putc_f, void *putc_data, const CHAR16 *restrict forma
                     } while (*str++ && --precision);
                     while (size_mod-- > 0)
                         putc_f(putc_data, u' ');
+                    break;
                 }
-                break;
 
                 default:
                     putc_f(putc_data, c);
