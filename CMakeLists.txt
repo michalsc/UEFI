@@ -27,3 +27,5 @@ target_compile_definitions(BOOTaa64.EFI PRIVATE
     IDSTRING="${IDSTRING}"
 )
 target_link_options(BOOTaa64.EFI PRIVATE -subsystem:efi_application -entry:efi_main)
+
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/.git/index)
