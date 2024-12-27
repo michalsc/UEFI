@@ -45,4 +45,6 @@ typedef struct
     EFI_CONFIGURATION_TABLE *ConfigurationTable;
 } EFI_SYSTEM_TABLE;
 
+extern EFI_SYSTEM_TABLE *gST;
+
 #endif // INCLUDE_EFI_SYSTEM_H_

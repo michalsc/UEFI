@@ -339,4 +339,6 @@ typedef struct
     EFI_CREATE_EVENT_EX CreateEventEx; // UEFI 2.0+
 } EFI_BOOT_SERVICES;
 
+extern EFI_BOOT_SERVICES *gBS;
+
 #endif // INCLUDE_EFI_BOOT_H_

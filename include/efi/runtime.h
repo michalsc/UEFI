@@ -133,4 +133,6 @@ typedef struct
     EFI_QUERY_VARIABLE_INFO QueryVariableInfo;
 } EFI_RUNTIME_SERVICES;
 
+extern EFI_RUNTIME_SERVICES *gRS;
+
 #endif // INCLUDE_EFI_RUNTIME_H_
