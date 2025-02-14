@@ -137,11 +137,6 @@ EFI_STATUS init_graphics(EFI_HANDLE imageHandle)
                 kprintf(u"  Framebuffer at %p, size %d, pitch %d\r\n", graphics->Mode->FrameBufferBase, graphics->Mode->FrameBufferSize,
                         graphics->Mode->Info->PixelsPerScanLine);
 
-                UINT32 *ptr = (UINT32 *)graphics->Mode;
-                for (int i=0; i < sizeof(EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE) / 4; i++) {
-                    kprintf(u"%08lx\r\n", ptr[i]);
-                }
-
                 graphics->Blt(graphics, logo, EfiBltVideoFill, 0, 0, 0, 0, graphics->Mode->Info->HorizontalResolution,
                     graphics->Mode->Info->VerticalResolution, 0);
                 UINTN x = (graphics->Mode->Info->HorizontalResolution - logo_width) / 2;
