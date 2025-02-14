@@ -142,9 +142,9 @@ EFI_STATUS init_graphics(EFI_HANDLE imageHandle)
                 UINTN x = (graphics->Mode->Info->HorizontalResolution - logo_width) / 2;
                 UINTN y = (graphics->Mode->Info->VerticalResolution - logo_height) / 2;
                 graphics->Blt(graphics, logo, EfiBltBufferToVideo, 0, 0, x, y, logo_width, logo_height, 0);
-            }
 
-            EfiStall(3000000);
+                break;
+            }
         }
         EfiFreePool(handleBuffer);
     }
