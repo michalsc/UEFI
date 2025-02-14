@@ -24,7 +24,7 @@ add_executable(BOOTaa64.EFI
     support.c
 )
 
-target_link_libraries(BOOTaa64.EFI libdeflate_static)
+target_link_libraries(BOOTaa64.EFI PRIVATE libdeflate_static)
 target_include_directories(BOOTaa64.EFI PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(BOOTaa64.EFI PRIVATE -ffreestanding -Wall -Werror -pedantic)
 target_compile_definitions(BOOTaa64.EFI PRIVATE
@@ -33,3 +33,5 @@ target_compile_definitions(BOOTaa64.EFI PRIVATE
 target_link_options(BOOTaa64.EFI PRIVATE -subsystem:efi_application -entry:efi_main)
 
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/.git/index)
+
+install(PROGRAMS ${CMAKE_BINARY_DIR}/BOOTaa64.EFI DESTINATION ${CMAKE_INSTALL_PREFIX}/efi/ RENAME bootaa64.efi)
