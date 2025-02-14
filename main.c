@@ -131,7 +131,11 @@ EFI_STATUS init_graphics(EFI_HANDLE imageHandle)
 
                 }
 
-                graphics->SetMode(graphics, graphics->Mode->Mode);
+                stat = graphics->SetMode(graphics, graphics->Mode->Mode);
+                
+                if (stat != EFI_SUCCESS)
+                    continue;
+
                 kprintf(u"  MaxMode number: %d, Current mode: %d\r\n", graphics->Mode->MaxMode, graphics->Mode->Mode);
                 kprintf(u"  Resolution: %dx%d\r\n", graphics->Mode->Info->HorizontalResolution, graphics->Mode->Info->VerticalResolution);
                 kprintf(u"  Framebuffer at %p, size %d, pitch %d\r\n", graphics->Mode->FrameBufferBase, graphics->Mode->FrameBufferSize,
