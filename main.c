@@ -1,5 +1,9 @@
 #include <efi/system.h>
 #include <efi/protocols/graphics.h>
+#include <efi/protocols/loaded_image.h>
+#include <efi/protocols/simple_file_system.h>
+#include <efi/protocols/file.h>
+#include <efi/protocols/load_file.h>
 #include <support.h>
 #include <libdeflate.h>
 
@@ -191,7 +195,13 @@ EFI_STATUS checkBigEndian(void)
 EFI_STATUS efi_main(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE *systemTable)
 {
     EfiSetup(imageHandle, systemTable);
+    EFI_GUID lip = EFI_LOADED_IMAGE_PROTOCOL_GUID;
+    EFI_GUID sfs = EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
     uint64_t reg;
+    EFI_LOADED_IMAGE_PROTOCOL *loadedImageProtocol = NULL;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *simpleFileSystemProtocol = NULL;
+    EFI_FILE_PROTOCOL *fileProtocol = NULL;
+    EFI_HANDLE bootDevice;
 
     kprintf(u"Starting %S\r\n", &id[6]);
 
@@ -204,6 +214,31 @@ EFI_STATUS efi_main(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE *systemTable)
         kprintf(u"supported\r\n");
     else
         kprintf(u"unsupported\r\n");
+
+    EfiOpenProtocol(imageHandle, &lip, (void**)&loadedImageProtocol, imageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+
+    kprintf(u"Boot Device handle: %016lx\r\n", loadedImageProtocol->DeviceHandle);
+    bootDevice = loadedImageProtocol->DeviceHandle;
+    
+    EfiOpenProtocol(bootDevice, &sfs, (void**)&simpleFileSystemProtocol, imageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+    if (simpleFileSystemProtocol != NULL) {
+        kprintf(u"SFS protocol: %016lx\r\n", simpleFileSystemProtocol);
+
+        simpleFileSystemProtocol->OpenVolume(simpleFileSystemProtocol, &fileProtocol);
+    
+        kprintf(u"File protocol: %016lx\r\n", fileProtocol);    
+    }
+    else
+    {
+        EFI_GUID lfg = EFI_LOAD_FILE_PROTOCOL_GUID;
+        EFI_LOAD_FILE_PROTOCOL *loadFile;
+
+        kprintf(u"Boot device without simple file system protocol, trying LOAD_FILE_PROTOCOL instead \r\n");
+
+        EfiOpenProtocol(bootDevice, &lfg, (void**)&loadFile, imageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+
+        kprintf(u"Load File protocol: %016lx\r\n", loadFile);
+    }
 
     EfiStall(5000000);
 
