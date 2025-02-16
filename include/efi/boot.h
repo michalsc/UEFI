@@ -5,7 +5,7 @@
 #include <efi/memory.h>
 #include <efi/event.h>
 #include <efi/time.h>
-#include <efi/device.h>
+#include <efi/protocols/device_path.h>
 
 typedef EFI_TPL(EFIAPI *EFI_RAISE_TPL)(
     IN EFI_TPL NewTpl);
