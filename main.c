@@ -230,14 +230,36 @@ EFI_STATUS efi_main(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE *systemTable)
     }
     else
     {
+        EFI_GUID **protocolPtr;
+        UINTN protocolCount;
+
+        EfiProtocolsPerHandle(bootDevice, &protocolPtr, &protocolCount);
+        kprintf(u"boot device handle supports %d protocols:\r\n", protocolCount);
+
+        for (int i=0; i < protocolCount; i++) {
+            kprintf(u"  %03d: %08x-%04x-%04x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x\r\n", i, protocolPtr[i]->Data1, protocolPtr[i]->Data2, protocolPtr[i]->Data3,
+            protocolPtr[i]->Data4[0], protocolPtr[i]->Data4[1], protocolPtr[i]->Data4[2], protocolPtr[i]->Data4[3], 
+            protocolPtr[i]->Data4[4], protocolPtr[i]->Data4[5], protocolPtr[i]->Data4[6], protocolPtr[i]->Data4[7]);
+        }
+
+
+        uint8_t path[] = {
+            4, 4, 28, 0,
+            'c', 0, 'm', 0, 'd', 0, 'l', 0, 'i', 0, 'n', 0, 'e', 0, '.', 0, 't', 0, 'x', 0, 't', 0, 0, 0,
+            0x7f, 0xff, 4, 0
+        };
         EFI_GUID lfg = EFI_LOAD_FILE_PROTOCOL_GUID;
         EFI_LOAD_FILE_PROTOCOL *loadFile;
+        UINTN bufferSize = 0;
 
         kprintf(u"Boot device without simple file system protocol, trying LOAD_FILE_PROTOCOL instead \r\n");
 
         EfiOpenProtocol(bootDevice, &lfg, (void**)&loadFile, imageHandle, NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
 
         kprintf(u"Load File protocol: %016lx\r\n", loadFile);
+
+        EFI_STATUS status = loadFile->LoadFile(loadFile, (EFI_DEVICE_PATH_PROTOCOL *)path, 1, &bufferSize, NULL);
+        kprintf(u"Buffer size needed: %ld, status %lx\r\n", bufferSize, status);
     }
 
     EfiStall(5000000);

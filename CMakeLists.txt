@@ -34,4 +34,5 @@ target_link_options(BOOTaa64.EFI PRIVATE -subsystem:efi_application -entry:efi_m
 
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/.git/index)
 
-install(PROGRAMS ${CMAKE_BINARY_DIR}/BOOTaa64.EFI DESTINATION ${CMAKE_INSTALL_PREFIX}/efi/ RENAME bootaa64.efi)
+#install(PROGRAMS ${CMAKE_BINARY_DIR}/BOOTaa64.EFI DESTINATION ${CMAKE_INSTALL_PREFIX}/efi/ RENAME bootaa64.efi)
+install(SCRIPT MakeImg.cmake)
