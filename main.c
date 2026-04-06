@@ -4,6 +4,7 @@
 #include <efi/protocols/simple_file_system.h>
 #include <efi/protocols/file.h>
 #include <efi/protocols/load_file.h>
+#include <efi/protocols/pxe_base_code.h>
 #include <support.h>
 #include <libdeflate.h>
 

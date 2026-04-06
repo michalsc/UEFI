@@ -25,10 +25,34 @@ typedef void *EFI_HANDLE;
 typedef void *EFI_EVENT;
 typedef UINT64 EFI_LBA;
 typedef UINTN EFI_TPL;
-typedef struct { uint8_t b[32]; } EFI_MAC_ADDRESS;
-typedef struct { uint8_t b[4]; } EFI_IPv4_ADDRESS;
-typedef struct { uint8_t b[16]; } EFI_IPv6_ADDRESS;
-typedef struct { uint8_t b[16]; } EFI_IP_ADDRESS;
+
+
+//*******************************************************
+// EFI_IPv4_ADDRESS and EFI_IPv6_ADDRESS
+//*******************************************************
+typedef struct {
+    UINT8 Addr[4];
+} EFI_IPv4_ADDRESS;
+
+typedef struct {
+    UINT8 Addr[16];
+} EFI_IPv6_ADDRESS;
+
+//*******************************************************
+// EFI_IP_ADDRESS
+//*******************************************************
+typedef union {
+    UINT32 Addr[4];
+    EFI_IPv4_ADDRESS v4;
+    EFI_IPv6_ADDRESS v6;
+} EFI_IP_ADDRESS;
+
+//*******************************************************
+// EFI_MAC_ADDRESS
+//*******************************************************
+typedef struct {
+    UINT8 Addr[32];
+} EFI_MAC_ADDRESS;
 
 typedef struct
 {
