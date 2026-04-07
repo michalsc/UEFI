@@ -3,8 +3,8 @@ project("Emu68 EFI boot" VERSION 0.1.0)
 
 include(cmake/verstring.cmake)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_C_STANDARD 23)
 
 get_verstring(IDSTRING)
 
